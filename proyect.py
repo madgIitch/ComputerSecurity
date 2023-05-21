@@ -1,7 +1,6 @@
 import hashlib
 import os
 
-
 def generate_key():
     # Generar una clave de 16 bits aleatoria
     k0 = bytearray(os.urandom(2))
