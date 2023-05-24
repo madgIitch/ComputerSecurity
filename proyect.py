@@ -3,16 +3,16 @@ import os
 import random
 import platform
 
-def run():
 
-    # Variable que contiene las rutas base
-    ruta_1 = "/Users/felixbarenysmarimon/Desktop/UNIVERISTAT/ERASMUS FU/Computer Security/assigments/txts/"
-    ruta_2 = "C:\\Users\\peorr\\OneDrive\\Documentos\\GitHub\\ComputerSecurity\\pruebaPepe\\"
+# Variable que contiene las rutas base
+ruta_1 = "/Users/felixbarenysmarimon/Desktop/UNIVERISTAT/ERASMUS FU/Computer Security/assigments/txts/"
+ruta_2 = "C:\\Users\\peorr\\OneDrive\\Documentos\\GitHub\\ComputerSecurity\\pruebaPepe\\"
 
-    # Variable que contiene la ruta seleccionada
-    ruta = ruta_1 if platform.system() == "Darwin" else ruta_2
+# Variable que contiene la ruta seleccionada
+ruta = ruta_1 if platform.system() == "Darwin" else ruta_2
+    
 
-    ########### GENERATE KEYS ###############################
+def run_encryption():
     def generate_key():
         # Generar una clave de 16 bits aleatoria
         k0 = bytearray(os.urandom(2))
@@ -30,68 +30,64 @@ def run():
         return key
 
 
-    # Generar una lista de claves
-    key_list = [generate_key() for _ in range(10)]  # Cambiar 10 por el número deseado de claves
+    key_list = [generate_key() for _ in range(10)]
 
-    # Guardar las claves en un archivo .txt
     with open(ruta + "keys.txt", 'w') as f:
         for i in range(len(key_list)):
             f.write(key_list[i].hex())
             f.write('\n')
 
-    ### One time pad ENCRYPTION 
-
     def encrypt(key, secret):
         crypted = ''.join([chr(ord(c) ^ ord(secret[i])) for i, c in enumerate(key[:len(secret)])])
         return crypted
 
-    #######################
-
-    # Encrypt seven PT messages (say m1, ..., m7) using OTP, each with a unique key (say k1,...,k7).
     for i in range(7):
-        # Encrypt message
         with open(ruta + "plaintext_" + str(i) + ".txt") as f:
             secret = f.readlines()
             message_encr = encrypt(key=key_list[i].hex(), secret=secret[0])
 
-        # Save it
         with open(ruta + "cyphertext_" + str(i) + ".txt", 'w') as f:
             f.write(message_encr)
 
-    #######################
+        
 
-    # Pick any three messages from the above set {m1, ..., m7} and re-encrypt again, each time with a new unique key (k8, k9, k10).
-
-    # Choose randomly 3 numbers
-    random_mess = random.sample(range(7), 3)
-    keys = [7, 8, 9]
-
-    for i, x in enumerate(random_mess):
-        with open(ruta + "cyphertext_" + str(x) + ".txt", 'r') as f:
-            secret = f.readlines()
-            mess_encrypt = encrypt(key_list[keys[i]].hex(), secret[0])
-
-        # Save it
-        with open(ruta + "cyphertext2_" + str(x) + "_" + str(keys[i]) + ".txt", 'w') as f:
-            f.write(mess_encrypt)
-
-    ###################
-
-    # For the remaining three messages m8, m9, m10 encrypt while re-using one key from the set {k1, ..., k7} for each message.
-
-    messages = [7, 8, 9]
-    random_keys = random.sample(range(7), 3)
-
-    for i, x in enumerate(random_keys):
-        with open(ruta + "plaintext_" + str(messages[i]) + ".txt", 'r') as f:
-            secret = f.readlines()
-            mess_encrypt = encrypt(key_list[x].hex(), secret[0])
-
-        # Save it
-        with open(ruta + "cyphertext_" + str(messages[i]) + "_" + str(x) + ".txt", 'w') as f:
-            f.write(mess_encrypt)
+        # Run decryption after each encryption
 
 
-####TESTING
+def decrypt(key, ciphertext):
+    key_bytes = bytes.fromhex(key)  # Convertir la clave hexadecimal a bytes
+    key_str = key_bytes.decode('latin1')  # Convertir la clave de bytes a cadena de caracteres
+    decrypted = ''.join([chr(c ^ key_bytes[i % len(key_bytes)]) for i, c in enumerate(ciphertext.encode('latin1'))])
+    return decrypted
 
-run()
+def run_decryption():
+    ruta_keys = ruta + "keys.txt"
+
+    with open(ruta_keys, 'r') as f:
+        key_lines = f.readlines()
+
+    keys = [line.strip() for line in key_lines]
+
+    for i in range(7):
+        with open(ruta + "cyphertext_" + str(i) + ".txt", 'r') as f:
+            ciphertext = f.read().strip()
+
+        # Obtener la clave utilizada en esta iteración
+        if i < 7:
+            key_index = i
+        elif i < 10:
+            key_index = i - 7
+        else:
+            key_index = i % 7
+
+        key_used = keys[key_index]
+
+        decrypted_message = decrypt(key_used, ciphertext)
+
+        print("Decrypted message", i+1, ":", decrypted_message)
+
+
+# Ejecutar encriptación y desencriptación
+run_encryption()
+
+run_decryption()
