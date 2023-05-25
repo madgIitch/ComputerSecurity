@@ -7,7 +7,7 @@ def run():
 
     # Variable que contiene las rutas base
     ruta_1 = "/Users/felixbarenysmarimon/Desktop/UNIVERISTAT/ERASMUS FU/Computer Security/assigments/txts/"
-    ruta_2 = "C:\\Users\\peorr\\OneDrive\\Documentos\\GitHub\\ComputerSecurity\\pruebaPepe\\"
+    ruta_2 = "C:\\Users\\peorr\\OneDrive\\Documentos\\GitHub\\ComputerSecurity\\txts\\"
 
     # Variable que contiene la ruta seleccionada
     ruta = ruta_1 if platform.system() == "Darwin" else ruta_2
