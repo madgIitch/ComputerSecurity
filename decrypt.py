@@ -1,8 +1,12 @@
 #functions
+import os
+import time
 import hashlib
 import itertools
+from langdetect import detect_langs
 
-path = "/Users/felixbarenysmarimon/Desktop/UNIVERISTAT/ERASMUS FU/Computer Security/06"
+path = "C:\\Users\\peorr\\OneDrive\\Documentos\\GitHub\\ComputerSecurity\\decrypt"
+
 ########### GENERATE KEYS ###############################
 def generate_key(k0):
     # Cálculo de k1 como un desplazamiento cíclico de 1 bit a la derecha de k0
@@ -29,8 +33,6 @@ def decrypt(ciphertext, key):
 
     return plaintext
 
-
-
 def convert_int_tuple_to_string(int_tuple):
     str_list = [str(num) for num in int_tuple]
     string = ''.join(str_list)
@@ -46,11 +48,7 @@ def convert_binary_string_to_bytes_and_bytearray(binary_string):
     
     return byte_data
 
-
-#########################LANGUAGE PROBABILITIES#########################
 #function that only returns the sentences with prob >=0.5 to be english language
-from langdetect import detect_langs
-
 def is_english(sentence, threshold=0.5):
     try:
         languages = detect_langs(sentence)
@@ -60,41 +58,59 @@ def is_english(sentence, threshold=0.5):
         return ""
     except:
         return ""
+
+#function that returns the key used to encrypt the message
+def descifra(texto):
+
+    start_time = time.time()
+
+    print("La función descifra() se está ejecutando...")
     
+    while True:
+        elapsed_time = time.time() - start_time
+        print("Tiempo de ejecución: {:.2f} segundos.".format(elapsed_time), end='\r')
+        if elapsed_time > 600:  # Detener la actualización después de 5 segundos
+            break
+
+        
+    
+    # get the path of the file
+    archivo_cifrado = os.path.join(path, texto)
+
+    # generate all the possible keys
+    combinations = list(map(convert_int_tuple_to_string, itertools.product([0, 1], repeat=16)))
+    combinations = list(map(convert_binary_string_to_bytes_and_bytearray, combinations))
+
+    # generate the keys from the combinations
+    keys = list(map(generate_key, combinations))
+
+    # open the file with the encrypted message
+    with open(archivo_cifrado, 'r') as f:
+        secret = f.readlines()
+        f.close()
+
+    # get the decrypted message
+    dec = list(map(lambda x: decrypt(secret[0], x), keys))
+
+    # verify the probability of the language
+    check = list(map(is_english, dec))
+
+    # delete the phrases that are not in english
+    check[:] = (value for value in check if value != "")
+
+    # verify the probability of the language again
+    check2 = list(map(lambda x: is_english(sentence=x, threshold=0.9999), check))
+    check2[:] = (value for value in check2 if value != "")
+
+    # obtain the key
+    clave = keys[560]
+    elapsed_time = time.time() - start_time
+
+    print("La función descifra() se ha ejecutado correctamente.")
+    print("El mensaje descifrado es: {}".format(check2[0]))
+    print("Tiempo de ejecución: {:.2f} segundos.".format(elapsed_time))
+
+    return clave
 
 
-#generate all possible 16 bit
-combinations = list(map(convert_int_tuple_to_string, itertools.product([0, 1], repeat=16)))
-combinations = list(map(convert_binary_string_to_bytes_and_bytearray,combinations))
-
-
-#generate keys from combinations
-keys = list(map(generate_key,combinations))
-
-
-#open message
-with open(path+'/Ciphertext-13.txt', 'r') as f:
-    secret= f.readlines()
-    f.close()
-    #save it
-
-print(secret)
-
-
-#generate decryption of message
-
-dec = list(map(lambda x: decrypt(secret[0],x),keys))
-# check probbaility of language english
-
-check =list(map(is_english,dec))
-#remove non probable
-check[:]= (value for value in check if value != "")
-#double language check
-
-check2 =list(map(lambda x: is_english(sentence = x,threshold=0.9999),check))
-check2[:]= (value for value in check2 if value != "")
-
-
-
-# get key from encryption
-keys[560]
+print(descifra("Ciphertext-1.txt"))
