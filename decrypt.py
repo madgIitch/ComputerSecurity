@@ -65,12 +65,16 @@ def descifra(texto):
     start_time = time.time()
 
     print("La función descifra() se está ejecutando...")
-    
     while True:
         elapsed_time = time.time() - start_time
-        print("Tiempo de ejecución: {:.2f} segundos.".format(elapsed_time), end='\r')
-        if elapsed_time > 600:  # Detener la actualización después de 5 segundos
+        minutes = int(elapsed_time // 60)
+        seconds = int(elapsed_time % 60)
+        print("Tiempo de ejecución: {:02d} minutos {:02d} segundos".format(minutes, seconds), end="\r")
+
+        if elapsed_time > 3600:  # Detener el contador después de 10 segundos
             break
+    
+    
 
         
     
@@ -87,16 +91,19 @@ def descifra(texto):
     # open the file with the encrypted message
     with open(archivo_cifrado, 'r') as f:
         secret = f.readlines()
+        print("El mensaje cifrado es: {}".format(secret[0]))
         f.close()
 
     # get the decrypted message
     dec = list(map(lambda x: decrypt(secret[0], x), keys))
+    print("El mensaje descifrado es: {}".format(dec[560]))
 
     # verify the probability of the language
     check = list(map(is_english, dec))
 
     # delete the phrases that are not in english
     check[:] = (value for value in check if value != "")
+    print("El mensaje descifrado es: {}".format(check[0]))
 
     # verify the probability of the language again
     check2 = list(map(lambda x: is_english(sentence=x, threshold=0.9999), check))
@@ -107,8 +114,13 @@ def descifra(texto):
     elapsed_time = time.time() - start_time
 
     print("La función descifra() se ha ejecutado correctamente.")
-    print("El mensaje descifrado es: {}".format(check2[0]))
     print("Tiempo de ejecución: {:.2f} segundos.".format(elapsed_time))
+
+    # print the decrypted message
+    if len(check2) > 0:
+        print("Texto descifrado:")
+        for texto_descifrado in check2:
+            print(texto_descifrado)
 
     return clave
 
