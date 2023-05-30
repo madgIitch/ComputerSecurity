@@ -10,9 +10,13 @@ def encrypt(key, secret):
     return crypted
 #decrypt one
 
-with open("txts/cyphertext_0.txt", 'r') as f:
+with open("txts/cyphertext_1.txt", 'r') as f:
     mess=f.readlines()
-    print(encrypt(keys[0],mess[0]))
+    print(encrypt(keys[1],mess[0]))
     f.close()  
+
+
+
+
 
 #Works!!!!!!
