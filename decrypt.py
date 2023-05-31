@@ -1,4 +1,3 @@
-#functions
 import os
 import time
 import hashlib
@@ -74,10 +73,6 @@ def descifra(texto):
         if elapsed_time > 3600:  # Detener el contador después de 10 segundos
             break
     
-    
-
-        
-    
     # get the path of the file
     archivo_cifrado = os.path.join(path, texto)
 
@@ -121,8 +116,9 @@ def descifra(texto):
         print("Texto descifrado:")
         for texto_descifrado in check2:
             print(texto_descifrado)
+            mensaje_descifrado = texto_descifrado
 
-    return clave
+    return mensaje_descifrado
 
 
-print(descifra("Ciphertext-1.txt"))
+print(descifra("Ciphertext-3.txt"))
