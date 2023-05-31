@@ -1,11 +1,10 @@
-import os
-import time
+#functions
 import hashlib
 import itertools
-from langdetect import detect_langs
+import nltk
+
 
 path = "C:\\Users\\peorr\\OneDrive\\Documentos\\GitHub\\ComputerSecurity\\decrypt"
-
 ########### GENERATE KEYS ###############################
 def generate_key(k0):
     # Cálculo de k1 como un desplazamiento cíclico de 1 bit a la derecha de k0
@@ -22,15 +21,22 @@ def generate_key(k0):
 ### One time pad ENCRYPTION 
 
 def decrypt(ciphertext, key):
+
     # Convert ciphertext and key to binary using hex decoding
-    ciphertext_bin = bytes.fromhex(ciphertext)
+    try: 
+        ciphertext_bin = bytes.fromhex(ciphertext)
+    except:
+        ciphertext_bin=ciphertext
+
+
+
     key_bin = key.encode('ascii')
 
     # Compute the plaintext by XORing the ciphertext and key
     plaintext = ''.join(chr(ct_byte ^ key_byte)
                         for ct_byte, key_byte in zip(ciphertext_bin, key_bin))
-
     return plaintext
+
 
 def convert_int_tuple_to_string(int_tuple):
     str_list = [str(num) for num in int_tuple]
@@ -47,78 +53,44 @@ def convert_binary_string_to_bytes_and_bytearray(binary_string):
     
     return byte_data
 
-#function that only returns the sentences with prob >=0.5 to be english language
-def is_english(sentence, threshold=0.5):
-    try:
-        languages = detect_langs(sentence)
-        for lang in languages:
-            if lang.lang == 'en' and lang.prob >= threshold:
-                return sentence
-        return ""
-    except:
-        return ""
 
-#function that returns the key used to encrypt the message
-def descifra(texto):
+####language check
+import nltk
+nltk.download('words')
+from nltk.corpus import words
 
-    start_time = time.time()
+#compare words
+english_words = words.words()
+filtered_words = set([word for word in english_words if len(word) > 3])
 
-    print("La función descifra() se está ejecutando...")
-    while True:
-        elapsed_time = time.time() - start_time
-        minutes = int(elapsed_time // 60)
-        seconds = int(elapsed_time % 60)
-        print("Tiempo de ejecución: {:02d} minutos {:02d} segundos".format(minutes, seconds), end="\r")
+def has_matching_word(strings_list):  # Convert the English dictionary to a set for faster lookup
 
-        if elapsed_time > 3600:  # Detener el contador después de 10 segundos
-            break
-    
-    # get the path of the file
-    archivo_cifrado = os.path.join(path, texto)
+    for word in strings_list:
+        if word.lower() in filtered_words:  # Convert both strings to lowercase for case-insensitive comparison
+            return " ".join(strings_list)
+        
+    return None
 
-    # generate all the possible keys
-    combinations = list(map(convert_int_tuple_to_string, itertools.product([0, 1], repeat=16)))
-    combinations = list(map(convert_binary_string_to_bytes_and_bytearray, combinations))
+#generate all possible 16 bit
+combinations = list(map(convert_int_tuple_to_string, itertools.product([0, 1], repeat=16)))
+combinations = list(map(convert_binary_string_to_bytes_and_bytearray,combinations))
+#generate keys from possible combinations
+keys = list(map(generate_key,combinations))
 
-    # generate the keys from the combinations
-    keys = list(map(generate_key, combinations))
+#######DECYPER MESSAGE ######################
 
-    # open the file with the encrypted message
-    with open(archivo_cifrado, 'r') as f:
-        secret = f.readlines()
-        print("El mensaje cifrado es: {}".format(secret[0]))
-        f.close()
-
-    # get the decrypted message
-    dec = list(map(lambda x: decrypt(secret[0], x), keys))
-    print("El mensaje descifrado es: {}".format(dec[560]))
-
-    # verify the probability of the language
-    check = list(map(is_english, dec))
-
-    # delete the phrases that are not in english
-    check[:] = (value for value in check if value != "")
-    print("El mensaje descifrado es: {}".format(check[0]))
-
-    # verify the probability of the language again
-    check2 = list(map(lambda x: is_english(sentence=x, threshold=0.9999), check))
-    check2[:] = (value for value in check2 if value != "")
-
-    # obtain the key
-    clave = keys[560]
-    elapsed_time = time.time() - start_time
-
-    print("La función descifra() se ha ejecutado correctamente.")
-    print("Tiempo de ejecución: {:.2f} segundos.".format(elapsed_time))
-
-    # print the decrypted message
-    if len(check2) > 0:
-        print("Texto descifrado:")
-        for texto_descifrado in check2:
-            print(texto_descifrado)
-            mensaje_descifrado = texto_descifrado
-
-    return mensaje_descifrado
-
-
-print(descifra("Ciphertext-3.txt"))
+#open message
+with open(path+'/Ciphertext-3.txt', 'r') as f:
+    secret= f.readlines()
+    print(secret)
+    f.close()
+#decrypt
+dec = list(map(lambda x: decrypt(secret[0],x),keys))
+dec2 = list(map(lambda x: x.split(" "),dec))
+print(dec2)
+#see matching words
+dec3 = list(map(lambda x: has_matching_word(x),dec2))
+print(dec3)
+#print possible
+dec4= list(filter(lambda x: x != None, dec3))
+print(dec4)

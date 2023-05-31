@@ -1,19 +1,20 @@
 #import keys
-keys=[]
-with open("txts/keys.txt", 'r') as f:
-    keys=f.readlines()
-    f.close()  
+def check():
+    keys=[]
+    with open("txts/keys.txt", 'r') as f:
+        keys=f.readlines()
+        f.close()  
 
-def encrypt(key, secret):
-    crypted = ''.join(
-        [chr(ord(c) ^ ord(secret[i])) for i, c in enumerate(key[:len(secret)])])
-    return crypted
-#decrypt one
+    def encrypt(key, secret):
+        crypted = ''.join(
+            [chr(ord(c) ^ ord(secret[i])) for i, c in enumerate(key[:len(secret)])])
+        return crypted
+    #decrypt one
 
-with open("txts/cyphertext_1.txt", 'r') as f:
-    mess=f.readlines()
-    print(encrypt(keys[1],mess[0]))
-    f.close()  
+    with open("txts/cyphertext_1.txt", 'r') as f:
+        mess=f.readlines()
+        print(encrypt(keys[1],mess[0]))
+        f.close()  
 
 
 
@@ -22,12 +23,38 @@ with open("txts/cyphertext_1.txt", 'r') as f:
 
 #Works!!!!!!
 
-llave = []
-mensaje = '065c070c51515051035355500055015f5350010709510502090107520256020a52000601510507020c53030c5053515100040404030357510153015002560304520452070356530356575504025a060a010a5009565d06520c070250040602560709040a575f0706520100535008005b05080c52010f540d07090c0751045751555700520402070506565407540f570103060852510553040553050700040c000102000a5106530f57000401050505530450055504575306575705530806060003500204005207030c0a07530653510e51530c53065952570404090a57580c55030107030751030453565651050f05540459'
+def check2():
+    keys = "That chocolate lava cake was divine! Already craving it again. We should definitely explore more dessert places soon."
+    secret = "6550524d45050d5f060954501507165e5414571900505f501047554418555b46580f501016750a4b0004074a43521605445d0c06455f1611035f575d0b18446e5019470e5f105e064150575208085840065b4c455d4044090e435c180e5e4353415c00154303431241115d025b061017405f595e48"
 
-def desencripta (llave, mensaje):
-    desencriptado = ''.join(
-        [chr(ord(c) ^ ord(mensaje[i])) for i, c in enumerate(llave[:len(mensaje)])])
-    return desencriptado
+    def encrypt(key, secret):
+        crypted = ''.join([chr(ord(c) ^ ord(secret[i])) for i, c in enumerate(key[:len(secret)])])
+        return crypted
 
-desencripta(llave, mensaje)
+    encrypted_text = encrypt(keys, secret)
+    with open('llave.txt', 'a') as file:
+        file.write(encrypted_text + '\n')
+
+    print(encrypted_text)
+    return encrypted_text
+
+
+def check3():
+    keys= check2()
+    secret = "6550524d45050d5f060954501507165e5414571900505f501047554418555b46580f501016750a4b0004074a43521605445d0c06455f1611035f575d0b18446e5019470e5f105e064150575208085840065b4c455d4044090e435c180e5e4353415c00154303431241115d025b061017405f595e48"
+
+    def decrypt(key, secret):
+        crypted = ''.join(
+            [chr(ord(c) ^ ord(secret[i])) for i, c in enumerate(key[:len(secret)])])
+        return crypted
+    
+    
+    
+    print(decrypt(keys,secret))
+        
+
+
+
+def check4():
+    encriptado = 
+    plano = ""
