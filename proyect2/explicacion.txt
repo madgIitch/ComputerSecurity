@@ -1,0 +1,52 @@
+A continuación se encuentran las traducciones de las tareas que has proporcionado, junto con una explicación de lo que se te solicita hacer en cada una:
+
+Para las siguientes tareas, envía: código, argumentos, archivo readme y una explicación para cada una.
+
+1. Escribe un programa mínimo inofensivo en C (llamado hello.c) con una vulnerabilidad de desbordamiento de búfer (BOF). Crea un shellcode para imprimir "hello world", 
+inyéctalo y corrompe la pila.
+
+Explicación: En esta tarea, debes escribir un programa en lenguaje C llamado "hello.c" que tenga una vulnerabilidad de desbordamiento de búfer. 
+Luego, debes crear un shellcode que imprima "hello world". Después, debes inyectar ese shellcode en el programa vulnerable y corromper la pila 
+para ejecutar el shellcode.
+
+2. Escribe un programa mínimo inofensivo en C (llamado shellcode.c) con una vulnerabilidad de desbordamiento de búfer (BOF). 
+Crea un shellcode para abrir una shell, inyéctalo y corrompe la pila.
+
+Explicación: En esta tarea, debes escribir un programa en lenguaje C llamado "shellcode.c" que tenga una vulnerabilidad de desbordamiento de búfer. 
+Luego, debes crear un shellcode que abra una shell. Después, debes inyectar ese shellcode en el programa vulnerable y corromper la pila para ejecutar 
+el shellcode.
+
+3. Repite la tarea anterior (shellcode-2.c) con la inyección del shellcode por encima de rip.
+
+Explicación: En esta tarea, debes repetir la tarea anterior de la pregunta 2, pero esta vez debes inyectar el shellcode por encima de la dirección de retorno 
+rip en la pila.
+
+4. Escribe un programa mínimo inofensivo en C (llamado fibohack.c) con una vulnerabilidad de desbordamiento de búfer (BOF). 
+Crea un shellcode para calcular el décimo número de Hemachandra/Fibonacci. Escribe un programa que tome como entrada un número entero i y genere un shellcode
+para calcular el i-ésimo número. El shellcode generado debe funcionar con el programa vulnerable.
+
+Explicación: En esta tarea, debes escribir un programa en lenguaje C llamado "fibohack.c" que tenga una vulnerabilidad de desbordamiento de búfer. 
+Luego, debes crear un shellcode que calcule el décimo número de Hemachandra/Fibonacci. Después, debes escribir otro programa que tome un número entero i 
+como entrada y genere un shellcode para calcular el i-ésimo número de Fibonacci. El shellcode generado debe funcionar con el programa vulnerable.
+
+5. Escribe un programa mínimo inofensivo en C (llamado offbyone.c) con un error de "off-by-one" (el ejemplo en el artículo podría ser útil). Crea un shellcode 
+para corromper la pila (cualquier secuestro del flujo de control sería aceptable).
+
+Explicación: En esta tarea, debes escribir un programa en lenguaje C llamado "offbyone.c" que contenga un error de "off-by-one". Luego, debes crear un shellcode 
+que corrompa la pila del programa. El objetivo es lograr un secuestro del flujo de control utilizando ese shellcode.
+
+***********
+
+Bonus:
+- (sudo) Repite la tarea de spawnear una shell con un programa que tenga la bandera setuid habilitada. 
+El shellcode debe spawnear una shell con privilegios de root cuando se ejecute como usuario normal.
+
+Explicación: En este bono, se te solicita repetir la tarea de spawnear una shell, pero esta vez debes hacerlo en un programa que 
+tenga la bandera setuid habilitada. Además, el shellcode debe ser capaz de spawnear una shell con privilegios de root incluso si el programa 
+se ejecuta como un usuario normal.
+
+- Repite la tarea anterior con ASLR habilitado.
+
+Explicación: En este bono, se te solicita repetir la tarea anterior de spawnear una shell, pero esta vez debes hacerlo en un entorno donde ASLR 
+(ddress Space Layout Randomization) esté habilitado. ASLR es una técnica de seguridad que aleatoriza la ubicación de las áreas clave de la memoria 
+para dificultar los ataques. Por lo tanto, debes encontrar una forma de sortear esta protección y lograr spawnear una shell.
