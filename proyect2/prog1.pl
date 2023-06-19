@@ -14,7 +14,7 @@ $payload .= $val1_le;                  # Agrega el valor de val1 en formato litt
 $payload .= $val2_le;                  # Agrega el valor de val2 en formato little endian
 
 # Ejecutar el programa C con el payload como argumento
-my $programa = './mi_programa';        # Ruta al programa compilado
+my $programa = './prog1';        # Ruta al programa compilado
 my $comando = "$programa \"$payload\""; # Comando para ejecutar el programa con el payload
 my $resultado = `$comando`;
 
