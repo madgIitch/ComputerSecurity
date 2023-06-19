@@ -13,6 +13,9 @@ my $payload = pack('C*', (0) x 8);     # Rellena el buffer con 8 bytes nulos
 $payload .= $val1_le;                  # Agrega el valor de val1 en formato little endian
 $payload .= $val2_le;                  # Agrega el valor de val2 en formato little endian
 
+# Escapar caracteres especiales en el payload
+$payload = quotemeta($payload);
+
 # Ejecutar el programa C con el payload como argumento
 my $programa = './prog1';        # Ruta al programa compilado
 my $comando = "$programa \"$payload\""; # Comando para ejecutar el programa con el payload
