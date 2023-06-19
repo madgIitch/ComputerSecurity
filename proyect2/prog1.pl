@@ -19,6 +19,4 @@ $payload = quotemeta($payload);
 # Ejecutar el programa C con el payload como argumento
 my $programa = './prog1';        # Ruta al programa compilado
 my $comando = "$programa \"$payload\""; # Comando para ejecutar el programa con el payload
-my $resultado = `$comando`;
-
-print $resultado;
+system($comando);
