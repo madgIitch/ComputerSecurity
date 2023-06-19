@@ -20,3 +20,4 @@ Una vez está corriendo el programa, se puede usar el comando print &variable pa
 Para saber el endianess de la máquina, se puede usar el comando info target. En el caso de la máquina en la que se ha ejecutado el programa, el endianess es little endian.
 
 
+
