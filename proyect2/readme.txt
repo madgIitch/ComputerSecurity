@@ -25,3 +25,9 @@ readelf -a hello.bin | grep "Entry point address"
 carga util --> \x00\x90\x04\x08
 
 
+--------------------------------
+
+hello segunda vuelta
+
+nasm -f elf32 -o helloShellcode.o helloShellcode.asm
+ld -m elf_i386 -o helloShellcode helloShellcode.o
