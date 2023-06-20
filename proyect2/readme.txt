@@ -5,9 +5,23 @@ chmod +x prog1.pl
 ./prog1.pl
 
 
-Una vez está corriendo el programa, se puede usar el comando print &variable para saber la posición de memoria de la variable.
+----------------------
+hello
 
-Para saber el endianess de la máquina, se puede usar el comando info target. En el caso de la máquina en la que se ha ejecutado el programa, el endianess es little endian.
+nasm -f elf32 hello.asm -o hello.o
+ld -m elf_i386 hello.o -o hello.bin
+ld -m elf_i386 -o hello hello.o
+./hello
 
+gcc -g -o hello hello.c
+
+./hello
+
+readelf -a hello.bin | grep "Entry point address"
+
+
+
+----------------------
+carga util --> \x00\x90\x04\x08
 
 
