@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <string.h>
 
-void vulnerableFunction(char *input) {
+void vulnerableFunction(char* input) {
     char buffer[8];
     strcpy(buffer, input);
+    printf("Buffer content: %s\n", buffer);
 }
 
 int main() {
     char input[16];
-    printf("Ingrese su entrada: ");
-    gets(input);
+    printf("Enter your input: ");
+    scanf("%s", input);
     vulnerableFunction(input);
-    printf("Fin del programa.\n");
     return 0;
 }

@@ -2,17 +2,17 @@ section .text
     global _start
 
 _start:
-    ; Escribir "Hello, World!" en la salida estándar
-    mov eax, 4         ; Número de la llamada al sistema 'write'
-    mov ebx, 1         ; Descriptor de archivo para la salida estándar (stdout)
-    mov ecx, message   ; Dirección del mensaje
-    mov edx, 13        ; Longitud del mensaje
-    int 0x80           ; Llamar al sistema
-
-    ; Salir del programa
-    mov eax, 1         ; Número de la llamada al sistema 'exit'
-    xor ebx, ebx       ; Código de salida 0
-    int 0x80           ; Llamar al sistema
-
-section .data
-    message db "Hello, World!", 0x0a  ; Mensaje a imprimir
+    ; Prepare arguments for write system call
+    xor eax, eax             ; File descriptor (0 = stdin)
+    mov ebx, eax             ; Buffer (stdin)
+    xor ecx, ecx             ; Message offset
+    mov edx, 11              ; Message length (11 characters)
+    
+    ; Invoke write system call
+    mov al, 4                ; System call number for write
+    int 0x80                 ; Interrupt to invoke the kernel
+    
+    ; Exit program
+    xor eax, eax             ; System call number for exit
+    inc eax                  ; Exit status (1)
+    int 0x80                 ; Interrupt to invoke the kernel
