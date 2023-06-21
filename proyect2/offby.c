@@ -11,7 +11,6 @@ void function(char* str) {
 }
 
 int main(int argc, char* argv[]) {
-    int j = 58623;
     
     if (strlen(argv[1]) > 256)
         printf("Entrada fuera de tamaño.\n");
