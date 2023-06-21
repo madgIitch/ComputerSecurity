@@ -31,3 +31,8 @@ hello segunda vuelta
 
 nasm -f elf32 -o helloShellcode.o helloShellcode.asm
 ld -m elf_i386 -o helloShellcode helloShellcode.o
+
+gcc -m32 -z execstack -fno-stack-protector -o hello hello.c
+
+./helloShellcode | ./hello
+
