@@ -15,6 +15,7 @@ int check_authentication(char *password) {
 	int auth_flag = 0;
 	char password_buffer[16];
 	strcpy(password_buffer, password);
+	
 	if(strcmp(password_buffer, "Parker") == 0)
 		auth_flag = 1;
 	if(strcmp(password_buffer, "Peter") == 0)
@@ -27,7 +28,11 @@ int main(int argc, char *argv[]) {
 		exit(0);
 	}
 	if(check_authentication(argv[1])) 
-		granted();
+		if (strlen(argv[1])>24)
+			smashed();
+		else
+			granted();
 	else
 		denied();
+	
 }
