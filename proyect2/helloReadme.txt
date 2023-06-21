@@ -1,11 +1,3 @@
-Prog1
-
-gcc -g -o prog1 prog1.c 
-chmod +x prog1.pl     
-./prog1.pl
-
-
-----------------------
 hello
 
 nasm -f elf32 hello.asm -o hello.o

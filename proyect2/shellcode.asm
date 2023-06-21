@@ -1,18 +1,22 @@
+section .data
+    message db 'hello world',0x0a  ; Null-terminated message to print
+
 section .text
     global _start
 
 _start:
-    ; Prepare arguments for write system call
-    xor eax, eax             ; File descriptor (0 = stdin)
-    mov ebx, eax             ; Buffer (stdin)
-    xor ecx, ecx             ; Message offset
-    mov edx, 11              ; Message length (11 characters)
-    
-    ; Invoke write system call
-    mov al, 4                ; System call number for write
-    int 0x80                 ; Interrupt to invoke the kernel
-    
+    ; Preparar los argumentos para la llamada a la función system
+    xor eax, eax              ; Limpiar eax
+    mov ebx, message          ; Puntero al comando a ejecutar
+    xor ecx, ecx              ; Argumento adicional (opcional)
+    xor edx, edx              ; Argumento adicional (opcional)
+
+    ; Llamada a la función system
+    mov al, 0xb               ; Número de la llamada al sistema para system
+    int 0x80                  ; Interrupción para invocar al kernel
+
     ; Exit program
-    xor eax, eax             ; System call number for exit
-    inc eax                  ; Exit status (1)
-    int 0x80                 ; Interrupt to invoke the kernel
+    xor eax, eax              ; Número de la llamada al sistema para exit
+    xor ebx, ebx              ; Código de salida (0)
+    inc eax                   ; Ajustar el número de la llamada al sistema para exit
+    int 0x80                  ; Interrupción para invocar al kernel
